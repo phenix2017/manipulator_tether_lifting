@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="model_name" default="manipulator_tether_lifting"/>
+  <arg name="namespace" default="$(arg model_name)"/>
+  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_uavs_carma_lifting.xacro"/>
+  <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
+
+  <arg name="enable_logging" default="false"/>
+  <arg name="enable_ground_truth" default="true"/>
+  <arg name="log_file" default="$(arg model_name)"/>
+  <arg name="wait_to_record_bag" default="false"/>
+  <arg name="enable_mavlink_interface" default="false"/>
+  
+  <arg name="mav_model" default="firefly"/>
+  <arg name="object_mass" default="0.1"/>
+  <arg name="object_length" default="1.0"/>
+  <arg name="contact_point_carma" default="0.5"/>
+  <arg name="contact_point_cable" default="-0.5"/>
+  <arg name="cable_length" default="0.4"/>
+
+  <!-- send the robot XML to param server -->
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(arg model)'
+    enable_logging:=$(arg enable_logging)
+    enable_ground_truth:=$(arg enable_ground_truth)
+    enable_mavlink_interface:=$(arg enable_mavlink_interface)
+    log_file:=$(arg log_file)
+    wait_to_record_bag:=$(arg wait_to_record_bag)
+    model_name:=$(arg model_name)
+    namespace:=$(arg namespace)
+    mav_model:=$(arg mav_model)
+    object_mass:=$(arg object_mass)
+    object_length:=$(arg object_length)
+    contact_point_carma:=$(arg contact_point_carma)
+    contact_point_cable:=$(arg contact_point_cable)
+    cable_length:=$(arg cable_length)
+    "
+  />
+
+  <param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_$(arg namespace)" pkg="gazebo_ros" type="spawn_model"
+   args="-param robot_description
+         -urdf
+         -x 0.0
+         -y 0.0
+         -z 0.5
+         -R 0.0
+         -P 0.0
+         -Y 0.0
+         -J $(arg namespace)/joint_obj_carma 0.0
+         -J $(arg namespace)/joint_carma_uav1 0.2
+         -J $(arg namespace)/joint_object_cable 0.0
+         -J $(arg namespace)/cable/joint_load1_load2 0.0
+         -J $(arg namespace)/cable/joint_load2_load3 0.0
+         -J $(arg namespace)/joint_cable_uav2 0.0
+         -J $(arg namespace)/carma/joint2 0.2
+         -J $(arg namespace)/carma/joint3 0.2
+         -model $(arg namespace)"
+   respawn="false" output="screen">
+  </node>
+
+</launch>

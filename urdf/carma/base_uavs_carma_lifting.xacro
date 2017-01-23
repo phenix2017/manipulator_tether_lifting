@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!-- -->
+
+<robot name="base_uavs_carma_lifting" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="namespace" value="$(arg namespace)"/>
+  <xacro:property name="mav_model" value="$(arg mav_model)"/>
+  <xacro:property name="object_mass" value="$(arg object_mass)"/>
+  <xacro:property name="object_length" value="$(arg object_length)"/>
+  <xacro:property name="contact_point_carma" value="$(arg contact_point_carma)"/>
+  <xacro:property name="contact_point_cable" value="$(arg contact_point_cable)"/>
+  <xacro:property name="cable_length" value="$(arg cable_length)"/>
+
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/uav_macro_$(arg mav_model).xacro"/>
+
+  <!-- creation of uav1 -->
+  <xacro:uav_macro
+    namespace="${namespace}/uav1">
+  </xacro:uav_macro>
+
+  <!-- creation of uav2 -->
+  <xacro:uav_macro
+    namespace="${namespace}/uav2">
+  </xacro:uav_macro>
+
+  <xacro:property name="carma_namespace" value="${namespace}/carma"/>
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma_reversed.xacro"/>
+
+  <link name="${namespace}/link_obj">
+   <inertial>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
+     <mass value="${object_mass}"/>
+     <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+   </inertial>
+
+   <visual>
+     <origin xyz="0 0 0" rpy="0 0 0" />
+     <geometry>
+       <box size="1 0.01 0.01" />
+     </geometry>
+     <material name="Cyan">
+       <color rgba="0 1.0 1.0 1.0"/>
+     </material>
+   </visual>
+  </link>
+
+  <joint name="${namespace}/joint_obj_carma" type="fixed">
+      <origin xyz="${contact_point_carma} 0 0" rpy="0 0 0"/>
+      <parent link="${namespace}/link_obj"/>
+      <child link="${namespace}/carma/link5"/>
+  </joint>
+
+  <joint name="${namespace}/joint_carma_uav1" type="continuous">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${namespace}/carma/link1"/>
+      <child link="${namespace}/uav1/base_link"/>
+   </joint>
+
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/macro_cable.xacro"/>
+
+  <xacro:cable
+    namespace="${namespace}/cable"
+    cable_length="${cable_length}"
+    cable_radius="0.01">
+  </xacro:cable>
+
+  <joint name="${namespace}/joint_object_cable" type="continuous">
+    <origin xyz="${contact_point_cable} 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0" />
+    <parent link="${namespace}/link_obj"/>
+    <child link="${namespace}/cable/load_bottom"/>
+  </joint>
+
+  <joint name="${namespace}/joint_cable_uav2" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0" />
+    <parent link="${namespace}/cable/load_top"/>
+    <child link="${namespace}/uav2/base_link"/>
+  </joint>
+
+</robot>
