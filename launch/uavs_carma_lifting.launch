@@ -56,25 +56,6 @@
   <!-- ################################################################### -->
   <group ns="firefly1">
 
-    <param name="partner_uav_odometry" type="str" value="/$(arg model_name)/uav2/ground_truth/odometry"/>
-
-     <!-- remap topic name -->
-     <remap from="$(arg uav_odometry)" to="/$(arg model_name)/uav1/ground_truth/odometry"/>
-     <!-- <remap from="$(arg uav_odometry)" to="ground_truth/odometry"/> -->
-     <remap from="firefly_motor_speed" to="/$(arg model_name)/uav1/command/motor_speed"/>
-     <!-- <remap from="firefly_motor_speed" to="command/motor_speed"/> -->
- 
-    <param name="uav_odometry" type="str" value="$(arg uav_odometry)"/>
-    <param name="reference_position" type="str" value="$(arg reference_position)"/>
-    <param name="fa_disturbance_estimate" type="str" value="$(arg fa_disturbance_estimate)"/>
-    <param name="playing_back" type="bool" value="$(arg playing_back)"/>
-
-    <!-- Controller Node -->
-    <include file="$(find quad_control)/launch/firefly_parameters.launch" />
-    <include file="$(find quad_control)/launch/firefly_control_parameters.launch" />
-    <node pkg="quad_control" name="controller_firefly" type="cycle_quad_control_mission.py" output="screen"/>
-
-
   </group>
 
 
@@ -82,24 +63,6 @@
   <!-- ##                     Controller for UAV_2                      ## -->
   <!-- ################################################################### -->
   <group ns="firefly_2">
-
-    <param name="partner_uav_odometry" type="str" value="/$(arg model_name)/uav1/ground_truth/odometry"/>
-
-     <!-- remap topic name -->
-     <remap from="$(arg uav_odometry)" to="/$(arg model_name)/uav2/ground_truth/odometry"/>
-     <!-- <remap from="$(arg uav_odometry)" to="ground_truth/odometry"/> -->
-     <remap from="firefly_motor_speed" to="/$(arg model_name)/uav2/command/motor_speed"/>
-     <!-- <remap from="firefly_motor_speed" to="command/motor_speed"/> -->
- 
-    <param name="uav_odometry" type="str" value="$(arg uav_odometry)"/>
-    <param name="reference_position" type="str" value="$(arg reference_position)"/>
-    <param name="fa_disturbance_estimate" type="str" value="$(arg fa_disturbance_estimate)"/>
-    <param name="playing_back" type="bool" value="$(arg playing_back)"/>
-
-    <!-- Controller Node -->
-    <include file="$(find quad_control)/launch/firefly_parameters.launch" />
-    <include file="$(find quad_control)/launch/firefly_control_parameters.launch" />
-    <node pkg="quad_control" name="controller_firefly" type="cycle_quad_control_mission.py" output="screen"/>
 
   </group>
 
