@@ -1,0 +1,501 @@
+<?xml version="1.0"?>
+<!--
+-->
+
+<!-- xacro root -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Included macro files -->
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/inertia.xacro" />
+
+  <xacro:property name="pi" value="3.14159265359"/>
+
+  <!-- Manipulator arm macro -->
+  <xacro:macro name="carma"
+    params="robot_namespace
+      mass_link1
+      mass_link2
+      mass_link3
+      mass_link4
+      mass_end_effector
+      inertia_zz_link1
+      inertia_zz_link2
+      inertia_zz_link3
+      inertia_zz_link4
+      length_x_link1
+      length_x_link2
+      length_x_link3
+      length_x_link4
+      length_x_end_effector
+      length_y_link1
+      length_y_link2
+      length_y_link3
+      length_y_link4
+      length_y_end_effector
+      length_z_link1
+      length_z_link2
+      length_z_link3
+      length_z_link4
+      length_z_end_effector
+      color
+      damping
+      friction
+      effort">
+
+    <!-- link 1 -->
+    <link name="${robot_namespace}/link1">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link1}" y="${length_y_link1}" z="${length_z_link1}" mass="${mass_link1}" izz="${inertia_zz_link1}">
+        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link1} ${length_y_link1} ${length_z_link1}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link1">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 2 -->
+    <joint name="${robot_namespace}/joint2" type="revolute">
+      <origin xyz="0 ${-(length_z_link1-length_z_link2)/2} ${-length_x_link1}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link1" />
+      <child link="${robot_namespace}/link2" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 2 -->
+    <link name="${robot_namespace}/link2">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link2}" y="${length_y_link2}" z="${length_z_link2}" mass="${mass_link2}" izz="${inertia_zz_link2}">
+        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link2} ${length_y_link2} ${length_z_link2}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link2">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 3 -->
+    <joint name="${robot_namespace}/joint3" type="revolute">
+      <origin xyz="0 ${(length_z_link1-length_z_link2)/2} ${-length_x_link2}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link2" />
+      <child link="${robot_namespace}/link3" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 3 -->
+    <link name="${robot_namespace}/link3">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link3}" y="${length_y_link3}" z="${length_z_link3}" mass="${mass_link3}" izz="${inertia_zz_link3}">
+        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link3} ${length_y_link3} ${length_z_link3}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link3">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 4 -->
+    <joint name="${robot_namespace}/joint4" type="revolute">
+      <origin xyz="0 0 ${-length_x_link3}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link3" />
+      <child link="${robot_namespace}/link4" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 4 -->
+    <link name="${robot_namespace}/link4">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link4}" y="${length_y_link4}" z="${length_z_link4}" mass="${mass_link4}" izz="${inertia_zz_link4}">
+        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link4} ${length_y_link4} ${length_z_link4}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link4">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 5 -->
+    <joint name="${robot_namespace}/joint5" type="prismatic">
+      <origin xyz="0 0 ${-length_x_link4}" rpy="0 0 0"/>
+      <axis xyz="0 0 1" />
+      <parent link="${robot_namespace}/link4" />
+      <child link="${robot_namespace}/link5" />
+      <dynamics damping="0" friction="0"/>
+      <limit lower="-0.05" upper="0.05" effort="10" velocity="10"/>
+    </joint>
+
+    <!-- link 5 -->
+    <link name="${robot_namespace}/link5">
+      <!-- Inertial properties -->
+      <xacro:box_inertial x="${length_y_end_effector}" y="${length_y_end_effector}" z="${length_y_end_effector}" mass="${mass_end_effector}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:box_inertial>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${length_y_end_effector/2}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${length_y_end_effector/2}"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+          <bounce/>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link5">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <transmission name="${robot_namespace}/tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint2">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor2">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran3">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint3">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor3">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran4">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint4">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor4">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran5">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint5">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor5">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </xacro:macro>
+
+  <!-- Manipulator arm macro -->
+  <xacro:macro name="carma_reverse"
+    params="robot_namespace
+      mass_link1
+      mass_link2
+      mass_link3
+      mass_link4
+      mass_end_effector
+      inertia_zz_link1
+      inertia_zz_link2
+      inertia_zz_link3
+      inertia_zz_link4
+      length_x_link1
+      length_x_link2
+      length_x_link3
+      length_x_link4
+      length_x_end_effector
+      length_y_link1
+      length_y_link2
+      length_y_link3
+      length_y_link4
+      length_y_end_effector
+      length_z_link1
+      length_z_link2
+      length_z_link3
+      length_z_link4
+      length_z_end_effector
+      color
+      damping
+      friction
+      effort">
+
+    <!-- link 1 -->
+    <link name="${robot_namespace}/link1">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link1}" y="${length_y_link1}" z="${length_z_link1}" mass="${mass_link1}" izz="${inertia_zz_link1}">
+        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link1} ${length_y_link1} ${length_z_link1}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link1">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 2 -->
+    <joint name="${robot_namespace}/joint2" type="revolute">
+      <origin xyz="0 ${-(length_z_link1-length_z_link2)/2} ${length_x_link1}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link2" />
+      <child link="${robot_namespace}/link1" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 2 -->
+    <link name="${robot_namespace}/link2">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link2}" y="${length_y_link2}" z="${length_z_link2}" mass="${mass_link2}" izz="${inertia_zz_link2}">
+        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link2} ${length_y_link2} ${length_z_link2}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link2">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 3 -->
+    <joint name="${robot_namespace}/joint3" type="revolute">
+      <origin xyz="0 ${(length_z_link1-length_z_link2)/2} ${length_x_link2}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link3" />
+      <child link="${robot_namespace}/link2" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 3 -->
+    <link name="${robot_namespace}/link3">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link3}" y="${length_y_link3}" z="${length_z_link3}" mass="${mass_link3}" izz="${inertia_zz_link3}">
+        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link3} ${length_y_link3} ${length_z_link3}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link3">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 4 -->
+    <joint name="${robot_namespace}/joint4" type="revolute">
+      <origin xyz="0 0 ${length_x_link3}" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${robot_namespace}/link4" />
+      <child link="${robot_namespace}/link3" />
+      <dynamics damping="${damping}" friction="${friction}"/>
+      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+    </joint>
+
+    <!-- link 4 -->
+    <link name="${robot_namespace}/link4">
+      <!-- Inertial properties -->
+      <xacro:box_inertial_z x="${length_x_link4}" y="${length_y_link4}" z="${length_z_link4}" mass="${mass_link4}" izz="${inertia_zz_link4}">
+        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+      </xacro:box_inertial_z>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <geometry>
+          <box size="${length_x_link4} ${length_y_link4} ${length_z_link4}"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link4">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <!-- joint 5 -->
+    <joint name="${robot_namespace}/joint5" type="prismatic">
+      <origin xyz="0 0 ${length_x_link4}" rpy="0 0 0"/>
+      <axis xyz="0 0 1" />
+      <parent link="${robot_namespace}/link5" />
+      <child link="${robot_namespace}/link4" />
+      <dynamics damping="0" friction="0"/>
+      <limit lower="-0.05" upper="0.05" effort="10" velocity="10"/>
+    </joint>
+
+    <!-- link 5 -->
+    <link name="${robot_namespace}/link5">
+      <!-- Inertial properties -->
+      <xacro:box_inertial x="${length_y_end_effector}" y="${length_y_end_effector}" z="${length_y_end_effector}" mass="${mass_end_effector}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:box_inertial>
+      <!-- Visual properties -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${length_y_end_effector/2}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${length_y_end_effector/2}"/>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+          <bounce/>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+        <max_contacts>10</max_contacts>
+      </collision>
+    </link>
+    <!-- Gazebo material -->
+    <gazebo reference="${robot_namespace}/link5">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+
+    <transmission name="${robot_namespace}/tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran2">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint2">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor2">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran3">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint3">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor3">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran4">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint4">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor4">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${robot_namespace}/tran5">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${robot_namespace}/joint5">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${robot_namespace}/motor5">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </xacro:macro>
+
+
+</robot>
+

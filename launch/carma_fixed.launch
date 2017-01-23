@@ -1,0 +1,32 @@
+<launch>
+
+  <arg name="model_name" default="carma_fixed"/>
+  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling1.xacro"/>
+  <!-- <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling2.xacro"/> -->
+
+  <arg name="enable_logging" default="false" />
+  <arg name="enable_ground_truth" default="true" />
+  <arg name="log_file" default="$(arg model_name)" />
+  <arg name="paused" value="true"/>
+
+  <!--<env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/> -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find rotors_gazebo)/worlds/basic.world" />
+    <!-- <arg name="debug" value="true"/> -->
+    <arg name="paused" value="$(arg paused)"/>
+    <!-- <arg name="gui" value="false"/> -->
+  </include>
+
+  <group ns="$(arg model_name)">
+
+    <include file="$(find manipulator_tether_lifting)/launch/spawn_$(arg model_name).launch">
+      <arg name="model_name" value="$(arg model_name)" />
+      <arg name="model" value="$(arg model)"/>
+      <arg name="enable_logging" value="$(arg enable_logging)" />
+      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+      <arg name="log_file" value="$(arg log_file)"/>
+    </include>
+    
+  </group>
+
+</launch>
