@@ -1,7 +1,10 @@
 <launch>
 
   <arg name="model_name" default="carma_fixed"/>
-  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling1.xacro"/>
+  <arg name="version" default="1"/>
+  <!-- <arg name="version" default="2"/> -->
+  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling$(arg version).xacro"/>
+  <!-- <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling1.xacro"/> -->
   <!-- <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_carma_on_ceiling2.xacro"/> -->
 
   <arg name="enable_logging" default="false" />
