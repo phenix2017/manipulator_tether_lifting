@@ -5,6 +5,10 @@ REQUIRES:
 https://github.com/ethz-asl/rotors_simulator
 
 INSTRUCTIONS:
+~~~
+roslaunch manipulator_tether_lifting uavs_carma_lifting.launch mav_model:=neo
+~~~
+or
 ~~~~
-roslaunch collaborative_load_lifting two_fireflies.launch
+roslaunch manipulator_tether_lifting uavs_carma_lifting.launch mav_model:=firefly
 ~~~~
