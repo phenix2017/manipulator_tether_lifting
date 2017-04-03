@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<!-- 
+  
+  One uav + one carma + carma joint controllers +  uav controller
+
+-->
+
+<launch>
+
+  <arg name="model_name" default="uav_with_carma"/>
+  <arg name="version" default="0"/>
+  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_uav_w_carma$(arg version).xacro"/>
+
+  <!-- <arg name="mav_model" default="neo"/> -->
+  <arg name="mav_model" default="firefly"/>
+
+  <arg name="xposition" default="0.0"/>
+  <arg name="yposition" default="0.0"/>
+  <arg name="zposition" default="1.0"/>
+
+  <include file="$(find manipulator_tether_lifting)/launch/spawn_uav_w_carma.launch">
+    <arg name="model_name" value="$(arg model_name)" />
+    <arg name="model" value="$(arg model)"/>
+    <arg name="xposition" value="$(arg xposition)"/>
+    <arg name="yposition" value="$(arg yposition)"/>
+    <arg name="zposition" value="$(arg zposition)"/>
+
+    <arg name="mav_model" value="$(arg mav_model)"/>
+  </include>
+  
+  <!-- <node name="ros_control_glue_node" pkg="neo_carma_description" type="ros_control_glue_node" output="screen"> -->
+    <!-- <remap from="setpoints" to="/morph/potentiometers" /> -->
+  <!-- </node> -->
+
+  <node name="rostopic1" pkg="rostopic" type="rostopic" args="pub -r 10 joint1_position_controller/command std_msgs/Float64 'data:  0.0'"/>
+  <node name="rostopic2" pkg="rostopic" type="rostopic" args="pub -r 10 joint2_position_controller/command std_msgs/Float64 'data:  0.4'"/>
+  <node name="rostopic3" pkg="rostopic" type="rostopic" args="pub -r 10 joint3_position_controller/command std_msgs/Float64 'data: -0.4'"/>
+  <node name="rostopic4" pkg="rostopic" type="rostopic" args="pub -r 10 joint4_position_controller/command std_msgs/Float64 'data:  0.0'"/>
+  <node name="rostopic5" pkg="rostopic" type="rostopic" args="pub -r 10 joint5_position_controller/command std_msgs/Float64 'data:  0.0'"/>
+
+  <!-- necessary to control joints (of carma) -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+
+  <!-- launch controllers for carma's joints-->
+  <arg name="carma_gains" value="$(find manipulator_tether_lifting)/config/carma_control.yaml" unless="$(arg version)"/>
+  <arg name="carma_gains" value="$(find manipulator_tether_lifting)/config/carma_reversed_control.yaml" if="$(arg version)"/>
+  <rosparam 
+    command="load" 
+    file="$(arg carma_gains)"
+  />
+
+  <!-- some renaming of joints' names is necessary-->
+  <rosparam param="joint1_position_controller/joint" subst_value="True">$(arg model_name)/carma/joint1</rosparam>
+  <rosparam param="joint2_position_controller/joint" subst_value="True">$(arg model_name)/carma/joint2</rosparam>
+  <rosparam param="joint3_position_controller/joint" subst_value="True">$(arg model_name)/carma/joint3</rosparam>
+  <rosparam param="joint4_position_controller/joint" subst_value="True">$(arg model_name)/carma/joint4</rosparam>
+  <rosparam param="joint5_position_controller/joint" subst_value="True">$(arg model_name)/carma/joint5</rosparam>
+
+  
+  <!-- send the robot XML to param server -->
+<!--   
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(arg model)'
+    model_name:=$(arg model_name)
+    namespace:=$(arg model_name)
+    "
+  /> 
+-->
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" 
+    pkg="controller_manager" 
+    type="spawner" 
+    respawn="false"
+    output="screen"
+    args=" 
+    joint_state_controller 
+    joint1_position_controller 
+    joint2_position_controller 
+    joint3_position_controller
+    joint4_position_controller
+    joint5_position_controller"
+    >
+  </node>
+
+  <!-- ################################################################### -->
+  <!-- ##                     Controller for UAV                        ## -->
+  <!-- ################################################################### -->
+
+  <arg name="uav_odometry" value="uav_odometry"/>
+  <arg name="reference_position" value="reference_position"/>
+  <arg name="fa_disturbance_estimate" value="fa_disturbance_estimate"/>
+  <arg name="file_name" default="file"/>
+  <arg name="playing_back" default="false"/>
+  <arg name="record" default="false" />
+  
+  <group ns="uav">
+
+       <!-- remap topic name -->
+       <remap from="$(arg uav_odometry)" to="/$(arg model_name)/uav/ground_truth/odometry"/>
+       <!-- <remap from="$(arg uav_odometry)" to="ground_truth/odometry"/> -->
+       <remap from="firefly_motor_speed" to="/$(arg model_name)/uav/command/motor_speed"/>
+       <!-- <remap from="firefly_motor_speed" to="command/motor_speed"/> -->
+   
+      <param name="uav_odometry" type="str" value="$(arg uav_odometry)"/>
+      <param name="reference_position" type="str" value="$(arg reference_position)"/>
+      <param name="fa_disturbance_estimate" type="str" value="$(arg fa_disturbance_estimate)"/>
+      <param name="playing_back" type="bool" value="$(arg playing_back)"/>
+
+      <!-- Controller Node -->
+      <include file="$(find quad_control)/launch/firefly_parameters.launch" />
+      <include file="$(find quad_control)/launch/firefly_control_parameters.launch" />
+      <node pkg="quad_control" name="controller_firefly" type="cycle_quad_control_mission.py" output="screen"/>
+
+  </group>
+
+
+</launch>

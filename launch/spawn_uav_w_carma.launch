@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<!-- 
+  
+  spawn robot: one uav + one carma
+
+-->
+
+<launch>
+  
+  <arg name="model_name" default="manipulator_tether_lifting"/>
+  <arg name="namespace" default="$(arg model_name)"/>
+  <arg name="version" default="0"/>
+  <arg name="model" default="$(find manipulator_tether_lifting)/urdf/carma/base_uav_w_carma$(arg version).xacro"/>
+  <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
+
+  <arg name="enable_logging" default="false"/>
+  <arg name="enable_ground_truth" default="true"/>
+  <arg name="log_file" default="$(arg model_name)"/>
+  <arg name="wait_to_record_bag" default="false"/>
+  <arg name="enable_mavlink_interface" default="false"/>
+  
+  <arg name="mav_model" default="firefly"/>
+
+  <arg name="xposition" default="0.0"/>
+  <arg name="yposition" default="0.0"/>
+  <arg name="zposition" default="1.0"/>
+
+  <!-- send the robot XML to param server -->
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(arg model)'
+    enable_logging:=$(arg enable_logging)
+    enable_ground_truth:=$(arg enable_ground_truth)
+    enable_mavlink_interface:=$(arg enable_mavlink_interface)
+    log_file:=$(arg log_file)
+    wait_to_record_bag:=$(arg wait_to_record_bag)
+    model_name:=$(arg model_name)
+    namespace:=$(arg namespace)
+    mav_model:=$(arg mav_model)
+    "
+  />
+
+  <param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_$(arg namespace)" pkg="gazebo_ros" type="spawn_model"
+   args="-param robot_description
+         -urdf
+         -x $(arg xposition)
+         -y $(arg yposition)
+         -z $(arg zposition)
+         -R 0.0
+         -P 0.0
+         -Y 0.0
+         -J $(arg namespace)/carma/joint1  0.0
+         -J $(arg namespace)/carma/joint2 -0.2
+         -J $(arg namespace)/carma/joint3  0.2
+         -J $(arg namespace)/carma/joint4  0.0
+         -J $(arg namespace)/carma/joint5  0.0
+         -model $(arg namespace)"
+   respawn="false" output="screen">
+  </node>
+
+</launch>
