@@ -55,11 +55,9 @@
 
 
   <!-- launch controllers for carma's joints-->
-  <arg name="carma_gains" value="$(find manipulator_tether_lifting)/config/carma_control.yaml" unless="$(arg version)"/>
-  <arg name="carma_gains" value="$(find manipulator_tether_lifting)/config/carma_reversed_control.yaml" if="$(arg version)"/>
   <rosparam 
     command="load" 
-    file="$(arg carma_gains)"
+    file="$(find manipulator_tether_lifting)/config/carma_control$(arg version).yaml"
   />
 
   <!-- some renaming of joints' names is necessary-->
