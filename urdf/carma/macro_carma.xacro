@@ -289,11 +289,11 @@
     <link name="${robot_namespace}/link1">
       <!-- Inertial properties -->
       <xacro:box_inertial_z x="${length_x_link1}" y="${length_y_link1}" z="${length_z_link1}" mass="${mass_link1}" izz="${inertia_zz_link1}">
-        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
       </xacro:box_inertial_z>
       <!-- Visual properties -->
       <visual>
-        <origin xyz="0 0 ${-length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link1/2}" rpy="0 ${pi/2} ${-pi/2}"/>
         <geometry>
           <box size="${length_x_link1} ${length_y_link1} ${length_z_link1}"/>
         </geometry>
@@ -305,24 +305,25 @@
     </gazebo>
 
     <!-- joint 2 -->
-    <joint name="${robot_namespace}/joint2" type="revolute">
-      <origin xyz="0 ${-(length_z_link1-length_z_link2)/2} ${length_x_link1}" rpy="0 0 0"/>
-      <axis xyz="0 1 0" />
+    <joint name="${robot_namespace}/joint2" type="continuous">
+      <origin xyz="0 0 ${length_x_link2}" rpy="0 0 0"/>
+      <axis xyz="0 -1 0" />
       <parent link="${robot_namespace}/link2" />
       <child link="${robot_namespace}/link1" />
       <dynamics damping="${damping}" friction="${friction}"/>
-      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+      <!-- TODO: this was screwing-up simulation -->
+      <!-- <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/> -->
     </joint>
 
     <!-- link 2 -->
     <link name="${robot_namespace}/link2">
       <!-- Inertial properties -->
       <xacro:box_inertial_z x="${length_x_link2}" y="${length_y_link2}" z="${length_z_link2}" mass="${mass_link2}" izz="${inertia_zz_link2}">
-        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
       </xacro:box_inertial_z>
       <!-- Visual properties -->
       <visual>
-        <origin xyz="0 0 ${-length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link2/2}" rpy="0 ${pi/2} ${-pi/2}"/>
         <geometry>
           <box size="${length_x_link2} ${length_y_link2} ${length_z_link2}"/>
         </geometry>
@@ -334,28 +335,31 @@
     </gazebo>
 
     <!-- joint 3 -->
-    <joint name="${robot_namespace}/joint3" type="revolute">
-      <origin xyz="0 ${(length_z_link1-length_z_link2)/2} ${length_x_link2}" rpy="0 0 0"/>
-      <axis xyz="0 1 0" />
+    <joint name="${robot_namespace}/joint3" type="continuous">
+      <origin xyz="0 0 ${length_x_link3}" rpy="0 0 0"/>
+      <axis xyz="0 -1 0" />
       <parent link="${robot_namespace}/link3" />
       <child link="${robot_namespace}/link2" />
-      <dynamics damping="${damping}" friction="${friction}"/>
-      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+      <!-- TODO: this was screwing-up simulation -->
+      <!-- <dynamics damping="${damping}" friction="${friction}"/> -->
+      <!-- <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/> -->
     </joint>
+
 
     <!-- link 3 -->
     <link name="${robot_namespace}/link3">
       <!-- Inertial properties -->
       <xacro:box_inertial_z x="${length_x_link3}" y="${length_y_link3}" z="${length_z_link3}" mass="${mass_link3}" izz="${inertia_zz_link3}">
-        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
       </xacro:box_inertial_z>
       <!-- Visual properties -->
       <visual>
-        <origin xyz="0 0 ${-length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 ${length_x_link3/2}" rpy="0 ${pi/2} ${-pi/2}"/>
         <geometry>
           <box size="${length_x_link3} ${length_y_link3} ${length_z_link3}"/>
         </geometry>
       </visual>
+
     </link>
     <!-- Gazebo material -->
     <gazebo reference="${robot_namespace}/link3">
@@ -363,24 +367,25 @@
     </gazebo>
 
     <!-- joint 4 -->
-    <joint name="${robot_namespace}/joint4" type="revolute">
-      <origin xyz="0 0 ${length_x_link3}" rpy="0 0 0"/>
-      <axis xyz="0 1 0" />
+    <joint name="${robot_namespace}/joint4" type="continuous">
+      <origin xyz="0 0 ${length_x_link4/2}" rpy="0 0 0"/>
+      <axis xyz="0 -1 0" />
       <parent link="${robot_namespace}/link4" />
       <child link="${robot_namespace}/link3" />
-      <dynamics damping="${damping}" friction="${friction}"/>
-      <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/>
+      <!-- TODO: this was screwing-up simulation -->
+      <!-- <dynamics damping="${damping}" friction="${friction}"/> -->
+      <!-- <limit lower="-3.14" upper="3.14" effort="${effort}" velocity="6.28"/> -->
     </joint>
 
     <!-- link 4 -->
     <link name="${robot_namespace}/link4">
       <!-- Inertial properties -->
       <xacro:box_inertial_z x="${length_x_link4}" y="${length_y_link4}" z="${length_z_link4}" mass="${mass_link4}" izz="${inertia_zz_link4}">
-        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${-pi/2}"/>
       </xacro:box_inertial_z>
       <!-- Visual properties -->
       <visual>
-        <origin xyz="0 0 ${-length_x_link4/2}" rpy="0 ${pi/2} ${-pi/2}"/>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${-pi/2}"/>
         <geometry>
           <box size="${length_x_link4} ${length_y_link4} ${length_z_link4}"/>
         </geometry>
@@ -394,7 +399,7 @@
     <!-- joint 5 -->
     <joint name="${robot_namespace}/joint5" type="prismatic">
       <origin xyz="0 0 ${length_x_link4}" rpy="0 0 0"/>
-      <axis xyz="0 0 1" />
+      <axis xyz="0 0 -1" />
       <parent link="${robot_namespace}/link5" />
       <child link="${robot_namespace}/link4" />
       <dynamics damping="0" friction="0"/>
@@ -414,25 +419,27 @@
           <sphere radius="${length_y_end_effector/2}"/>
         </geometry>
       </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <sphere radius="${length_y_end_effector/2}"/>
-        </geometry>
-        <surface>
-          <friction>
-            <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
-            </ode>
-          </friction>
-          <bounce/>
-          <contact>
-            <ode/>
-          </contact>
-        </surface>
-        <max_contacts>10</max_contacts>
-      </collision>
+      <!--       
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <sphere radius="${length_y_end_effector/2}"/>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0</mu>
+                <mu2>0</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision> 
+      -->
     </link>
     <!-- Gazebo material -->
     <gazebo reference="${robot_namespace}/link5">
