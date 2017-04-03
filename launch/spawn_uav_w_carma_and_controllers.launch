@@ -45,7 +45,6 @@
 
 
   <!-- launch controllers for carma's joints-->
-  <!-- launch controllers for carma's joints-->
   <rosparam 
     command="load" 
     file="$(find manipulator_tether_lifting)/config/carma_control$(arg version).yaml"
