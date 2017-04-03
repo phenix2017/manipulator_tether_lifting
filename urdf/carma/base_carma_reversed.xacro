@@ -12,14 +12,14 @@
   <xacro:property name="mass_link4" value="0.0250000000000000" /> <!-- [kg] -->
   <xacro:property name="mass_end_effector" value="0.038" /> <!-- [kg] -->
   <!-- TODO: low values here screw up simulation -->
-  <!-- <xacro:property name="inertia_zz_link1" value="0.000253151228084876" />   -->
-  <!-- <xacro:property name="inertia_zz_link2" value="0.000108770447476707" />   -->
-  <!-- <xacro:property name="inertia_zz_link3" value="3.47458286569986e-05" />   -->
-  <!-- <xacro:property name="inertia_zz_link4" value="3.42053994711421e-05" />   -->
-  <xacro:property name="inertia_zz_link1" value="0.00253151228084876" /> <!-- [kg*m^2] -->
-  <xacro:property name="inertia_zz_link2" value="0.00108770447476707" /> <!-- [kg*m^2] -->
-  <xacro:property name="inertia_zz_link3" value="3.47458286569986e-03" /> <!-- [kg*m^2] -->
-  <xacro:property name="inertia_zz_link4" value="3.42053994711421e-03" /> <!-- [kg*m^2] -->
+  <xacro:property name="inertia_zz_link1" value="0.000253151228084876" />  
+  <xacro:property name="inertia_zz_link2" value="0.000108770447476707" />  
+  <xacro:property name="inertia_zz_link3" value="3.47458286569986e-05" />  
+  <xacro:property name="inertia_zz_link4" value="3.42053994711421e-05" />  
+  <!-- <xacro:property name="inertia_zz_link1" value="0.00253151228084876" />  -->
+  <!-- <xacro:property name="inertia_zz_link2" value="0.00108770447476707" />  -->
+  <!-- <xacro:property name="inertia_zz_link3" value="3.47458286569986e-03" /> -->
+  <!-- <xacro:property name="inertia_zz_link4" value="3.42053994711421e-03" /> -->
 
   <xacro:property name="length_x_link1" value="0.173000000000000" /> <!-- [m] -->
   <xacro:property name="length_x_link2" value="0.122000000000000" /> <!-- [m] -->

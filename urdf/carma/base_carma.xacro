@@ -34,12 +34,16 @@
   <xacro:property name="thickness" value="0.028" /> <!-- [m] -->
   <xacro:property name="diameter_end_effector" value="0.018" /> <!-- [m] -->
   <xacro:property name="manipulator_position_z" value="-0.0" /> <!-- [m] -->
+
   <!-- chosen as a tenth of the friction... -->
-  <xacro:property name="damping" value="0.03" /> <!-- [(N*m)/(rad/s)] -->
+  <!-- <xacro:property name="damping" value="0.03" /> --> <!-- [(N*m)/(rad/s)] -->
+  <xacro:property name="damping" value="0.0" /> <!-- [(N*m)/(rad/s)] -->
   <!-- chosen as half of the torque the base joint requires to keep the arm horizontal... -->
-  <xacro:property name="friction" value="0.3" /> <!-- [N*m] -->
+  <!-- <xacro:property name="friction" value="0.3" /> --> <!-- [N*m] -->
+  <xacro:property name="friction" value="0.0" /> <!-- [N*m] -->
   <!-- effort: gearmotor torque = 5 kg*cm, bevel gear ratio is 1:2, so 1 N*m -->
-  <xacro:property name="effort" value="1" /> <!-- [N*m] -->
+  <!-- <xacro:property name="effort" value="1" /> --> <!-- [N*m] -->
+  <xacro:property name="effort" value="10" /> <!-- [N*m] -->
 
 
   <!-- Included URDF Files -->

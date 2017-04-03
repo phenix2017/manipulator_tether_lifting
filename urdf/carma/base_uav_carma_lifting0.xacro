@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- -->
+
+<robot name="base_uav_carma" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="namespace" value="$(arg namespace)"/>
+  <xacro:property name="mav_model" value="$(arg mav_model)"/>
+
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/uav_macro_$(arg mav_model).xacro"/>
+
+  <!-- creation of uav -->
+  <xacro:uav_macro
+    namespace="${namespace}/uav">
+  </xacro:uav_macro>
+
+
+  <xacro:property name="carma_namespace" value="${namespace}/carma"/>
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma.xacro"/>
+
+  <joint name="${namespace}/carma/joint1" type="continuous">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <parent link="${namespace}/carma/link1"/>
+      <child link="${namespace}/uav/base_link"/>
+  </joint>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <!-- <robotNamespace>${namespace}/${namespace}</robotNamespace> -->
+      <!-- <robotParam>${namespace}/${namespace}/robot_description</robotParam> -->
+      <robotNamespace></robotNamespace>
+    </plugin>
+  </gazebo>
+
+</robot>
