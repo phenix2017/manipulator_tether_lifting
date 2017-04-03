@@ -15,7 +15,7 @@
 
 
   <xacro:property name="carma_namespace" value="${namespace}/carma"/>
-  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma.xacro"/>
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma0.xacro"/>
 
   <joint name="${namespace}/carma/joint1" type="continuous">
       <origin xyz="0 0 0" rpy="0 0 0"/>

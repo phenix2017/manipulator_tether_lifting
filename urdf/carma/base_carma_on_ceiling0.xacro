@@ -12,7 +12,7 @@
 
   <!-- add carma -->
   <xacro:property name="carma_namespace" value="${namespace}/carma"/>
-  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma.xacro"/>
+  <xacro:include filename="$(find manipulator_tether_lifting)/urdf/carma/base_carma0.xacro"/>
 
   <link name="world">
   </link>
